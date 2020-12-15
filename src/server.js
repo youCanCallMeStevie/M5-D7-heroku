@@ -1,7 +1,6 @@
 const express = require("express")
 const cors = require("cors")
 const listEndpoints = require("express-list-endpoints")
-require('dotenv').config()
 const booksRoutes = require("./services/books")
 
 const {
@@ -12,7 +11,7 @@ const {
 
 const server = express()
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3007
 
 server.use(express.json())
 
