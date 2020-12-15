@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -r dotenv/config ./src/server.js"
-
+    "dev": "node ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +26,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-endpoints": "^1.0.0",
+    "express-list-endpoints": "^5.0.0",
     "express-validator": "^6.8.0",
     "fs-extra": "^9.0.1",
     "lodash": "^4.17.20",
