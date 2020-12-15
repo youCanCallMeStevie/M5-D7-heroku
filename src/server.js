@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const listEndpoints = require("express-list-endpoints")
-
+require('dotenv').config()
 const booksRoutes = require("./services/books")
 
 const {
@@ -37,7 +37,9 @@ const corsOptions = {
     }
   },
 }
-server.use(cors(corsOptions)) // CROSS ORIGIN RESOURCE SHARING
+ server.use(cors(corsOptions)) // needed for frontend testing
+//server.use(cors()) // needed for postman testing
+
 
 //ROUTES
 

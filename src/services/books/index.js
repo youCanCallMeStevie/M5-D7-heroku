@@ -42,7 +42,7 @@ const commentValidation = [
         );
         res.send(filteredbooks);
       } else {
-        res.setDefaultEncoding(books);
+        res.send(books);
       }
     } catch (error) {
       console.log(error);
@@ -140,7 +140,7 @@ const commentValidation = [
         book => book.asin === req.params.asin
       );
       if (bookFound) {
-        res.send(bookFound.reviews);
+        res.send(bookFound.comments);
       } else {
         const error = new Error();
         error.httpStatusCode = 404;
@@ -152,18 +152,18 @@ const commentValidation = [
     }
   });
   
-  router.get("/:asin/reviews/:reviewId", async (req, res, next) => {
+  router.get("/:asin/comments/:commentId", async (req, res, next) => {
     try {
       const books = await getBooks();
       const bookFound = books.find(
         book => book.asin === req.params.asin
       );
       if (bookFound) {
-        const reviewFound = bookFound.reviews.find(
-          review => review.asin === review.params.reviewId
+        const commentFound = bookFound.comments.find(
+          comment => comment.asin === comment.params.commentId
         );
-        if (reviewFound) {
-          res.status(201).send(reviewFound);
+        if (commentFound) {
+          res.status(201).send(commentFound);
         } else {
           const error = new Error();
           error.httpStatusCode = 404;
@@ -189,13 +189,18 @@ const commentValidation = [
       );
       if (bookIndex !== -1) {
         // book found
-        books[bookIndex].reviews.push({
+        const id = uniqid()
+        books[bookIndex].comments= books[bookIndex].comments ? [... books[bookIndex].comments, {
           ...req.body,
-          CommentID: uniqid(),
+          CommentID: id,
           Date: new Date(),
-        });
+        }] : [{
+          ...req.body,
+          CommentID: id,
+          Date: new Date(),
+        }];
         await writeBooks(books);
-        res.status(201).send(books);
+        res.status(201).send(id);
       } else {
         // book not found
         const error = new Error();
@@ -220,24 +225,24 @@ const commentValidation = [
         );
   
         if (bookIndex !== -1) {
-          const reviewIndex = books[bookIndex].reviews.findIndex(
-            review => review.asin === req.params.reviewId
+          const commentIndex = books[bookIndex].comments.findIndex(
+            comment => comment.asin === req.params.commentId
           );
   
-          if (reviewIndex !== -1) {
-            const previousReview = books[bookIndex].reviews[reviewIndex];
+          if (commentIndex !== -1) {
+            const previouscomment = books[bookIndex].comments[commentIndex];
   
-            const updateReviews = [
-              ...books[bookIndex].reviews.slice(0, reviewIndex),
-              { ...previousReview, ...req.body, updatedAt: new Date() },
-              ...books[bookIndex].reviews.slice(reviewIndex + 1),
+            const updatecomments = [
+              ...books[bookIndex].comments.slice(0, commentIndex),
+              { ...previouscomment, ...req.body, updatedAt: new Date() },
+              ...books[bookIndex].comments.slice(commentIndex + 1),
             ];
-            books[bookIndex].reviews = updateReviews;
+            books[bookIndex].comments = updatecomments;
   
             await writeBooks(books);
             res.send(books);
           } else {
-            console.log("Review not found");
+            console.log("comment not found");
           }
         } else {
           console.log("book not found");
@@ -253,7 +258,7 @@ const commentValidation = [
     try {
       const books = await getBooks();
       const bookIndex = books.findIndex(
-        book => book.asin === req.params.id
+        book => book.asin === req.params.asin
       );
       if (bookIndex !== -1) {
         books[bookIndex].comments = books[bookIndex].comments.filter(
