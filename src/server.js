@@ -37,8 +37,6 @@ const corsOptions = {
   },
 }
  server.use(cors(corsOptions)) // needed for frontend testing
-//server.use(cors()) // needed for postman testing
-
 
 //ROUTES
 
