@@ -15,15 +15,15 @@ const port = process.env.PORT || 3007
 
 server.use(express.json())
 
-// const whiteList = //creating an array, if we are in this mode, then do this
-//   process.env.NODE_ENV === "production" //this is a cloud provider code for production
-//     ? [process.env.FE_URL_PROD] //this is not from .env but rather the keys in heroku
-//     : [process.env.FE_URL_DEV]
+const whiteList = //creating an array, if we are in this mode, then do this
+  process.env.NODE_ENV === "production" //this is a cloud provider code for production
+    ? [process.env.FE_URL_PROD] //this is not from .env but rather the keys in heroku
+    : [process.env.FE_URL_DEV]
  
 
-const whiteList =[
-    process.env.FE_URL_PROD, process.env.FE_URL_DEV
-]
+// const whiteList =[
+//     process.env.FE_URL_PROD, process.env.FE_URL_DEV
+// ]
 
 const corsOptions = {
   origin: function (origin, callback) {
